@@ -1,4 +1,5 @@
-import { resolve, dirname, isAbsolute } from 'path';
+import { resolve, dirname, isAbsolute, join } from 'path';
+import chokidar from 'chokidar'
 
 // options resolvers
 import * as requireHooksOptions from './options_resolvers';
@@ -25,6 +26,11 @@ export default function transformCssModules({ types: t }) {
      * @returns {Array} array of class names
      */
     function requireCssFile(filepath, cssFile) {
+        const cssFilePath = join(dirname(filepath), cssFile)
+        chokidar.watch(cssFilePath).on('change', path => {
+            // TODO re-extract
+            console.log('change', path);
+        })
         let filePathOrModuleName = cssFile;
 
         // only resolve path to file when we have a file path
